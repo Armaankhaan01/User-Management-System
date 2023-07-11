@@ -5,7 +5,7 @@ const expressLayout = require("express-ejs-layouts");
 const connectDB = require("./server/config/db");
 const { flash } = require("express-flash-message");
 const session = require("express-session");
-
+const osu = require("node-os-utils");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -27,7 +27,7 @@ app.use(
 );
 
 // Flash Messages
-app.use(flash({sessionKeyName:'flashMessage'}));
+app.use(flash({ sessionKeyName: "flashMessage" }));
 
 //Connect to database
 connectDB();
@@ -44,6 +44,17 @@ app.use("/", require("./server/routes/customer"));
 // Handle 404
 app.get("*", (req, res) => {
   res.status(404).render("404");
+});
+
+let cpu = osu.cpu;
+cpu.usage().then((info) => {
+  console.log(info);
+});
+
+let mem = osu.mem;
+
+mem.info().then((info) => {
+  console.log(info);
 });
 
 // server configuration
