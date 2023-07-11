@@ -11,14 +11,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "ejs": "^3.1.9",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
     "express": "^4.18.2",
     "express-ejs-layouts": "^2.5.1",
-    "express-flash-messages": "^0.1.1",
+    "express-flash-message": "^2.1.0",
     "express-session": "^1.17.3",
     "method-override": "^3.0.0",
-    "mongoose": "^7.3.2"
+    "mongoose": "^7.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

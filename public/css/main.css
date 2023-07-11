@@ -1,3 +1,7 @@
+:root {
+  --sidebar-width: 300px; /* Default width */
+}
+
 body {
   font-size: 0.875rem;
 }
@@ -96,3 +100,8 @@ body {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
+
+
+
+
+
