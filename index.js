@@ -4,7 +4,7 @@ const express = require("express");
 const expressLayout = require("express-ejs-layouts");
 const connectDB = require("./server/config/db");
 const { flash } = require("express-flash-message");
-const session = require("cookie-session");
+const session = require("express-session");
 const osu = require("node-os-utils");
 const app = express();
 const port = process.env.PORT || 5000;
@@ -14,6 +14,7 @@ app.use(express.json());
 
 //static Files
 app.use("/public", express.static("public"));
+
 
 app.use(
   session({
