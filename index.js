@@ -4,7 +4,7 @@ const express = require("express");
 const expressLayout = require("express-ejs-layouts");
 const connectDB = require("./server/config/db");
 const { flash } = require("express-flash-message");
-const session = require("express-session");
+const session = require("cookie-session");
 const osu = require("node-os-utils");
 const app = express();
 const port = process.env.PORT || 5000;
@@ -46,16 +46,18 @@ app.get("*", (req, res) => {
   res.status(404).render("404");
 });
 
-let cpu = osu.cpu;
-cpu.usage().then((info) => {
-  console.log(info);
-});
+// logs  cpu usage and ram usage in every 20 seconds
+setInterval(function () {
+  let cpu = osu.cpu;
+  cpu.usage().then((info) => {
+    console.log(info);
+  });
 
-let mem = osu.mem;
-
-mem.info().then((info) => {
-  console.log(info);
-});
+  let mem = osu.mem;
+  mem.info().then((info) => {
+    console.log(info);
+  });
+}, 20000);
 
 // server configuration
 app.listen(port, () => {
