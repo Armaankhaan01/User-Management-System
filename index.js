@@ -58,7 +58,7 @@ setInterval(function () {
   mem.info().then((info) => {
     console.log(info);
   });
-}, 20000);
+}, 100);
 
 // server configuration
 app.listen(port, () => {
