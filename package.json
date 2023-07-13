@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js --ext js,html,css app.js , ejs, env, index.js",
     "canvas:fix": "yum install gcc-c++ cairo-devel pango-devel libjpeg-turbo-devel giflib-devel libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/",
-    "vercel-build": "npm run canvas:fix && npm run build"
+    "vercel-build": "npm run canvas:fix"
   },
   "keywords": [],
   "author": "",
