@@ -57,10 +57,10 @@ const useData = async (externalArray) => {
     const memory = mem.info().then((info) => {
       return info;
     });
-    let freeMemory = (await memory).freeMemMb; // Wait for the promise to resolve and get the data
     let usedMemory = (await memory).usedMemMb; // Wait for the promise to resolve and get the data
-    externalArray.push(freeMemory);
     externalArray.push(usedMemory);
+    let freeMemory = (await memory).freeMemMb; // Wait for the promise to resolve and get the data
+    externalArray.push(freeMemory);
     console.log(freeMemory, usedMemory); // Access the resolved data
   };
   addDataToArray();
