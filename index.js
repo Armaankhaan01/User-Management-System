@@ -89,12 +89,16 @@ app.get("/chart", (req, res) => {
       labels: data.labels,
       datasets: [
         {
-          data: data.values,
           backgroundColor: ["red", "blue"], // Customize colors as needed
+          data: data.values,
         },
       ],
     },
     options: {
+      title: {
+        display: true,
+        text: 'Server Ram Statistics'
+      },
       responsive: true, // Adjust as per your requirements
       maintainAspectRatio: true,
       plugins: {
