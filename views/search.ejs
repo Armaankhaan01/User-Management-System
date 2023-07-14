@@ -1,0 +1,73 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 ">
+    <h1 class="h2 dashboard-text">Search Result</h1>
+    <h6 class="dashboard-text text-end text-dark">Result Count : <%= customers.length %></h6>
+</div>
+
+
+
+
+
+<div class="table-responsive">
+    <% if (customers.length>0) { %>
+      <table class="table table-hover table-bordered table-sm">
+      <thead>
+  
+        <tr>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Telephone</th>
+          <th scope="col">Email</th>
+          <th scope="col" class="text-end">Action</th>
+        </tr>
+
+      </thead>
+      <tbody>
+        <% customers.forEach(element => { %>
+        <tr class="align-middle">
+          <td scope="col"><%= element.firstName %></td>
+          <td scope="col"><%= element.lastName %></td>
+          <td scope="col"><%= element.tel %></td>
+          <td scope="col"><%= element.email %></td>
+          <td scope="col" class="text-end">
+            <div class="d-flex flex-row justify-content-end gap-2">
+              <a href="/view/<%= element._id %>" type="button" class="btn btn-primary btn-small">
+                <i class="bi bi-eye"></i>
+              </a>
+              <a href="/edit/<%= element._id %>" type="button" class="btn btn-warning btn-small">
+                <i class="bi bi-pencil"></i>
+              </a>
+              <button type="button" class="btn btn-small btn-danger deleteLink" data-id="<%= element._id %>" data-bs-toggle="modal" id="deleteButton" data-bs-target="#ark<%= element._id %>"> <i class="bi bi-person"></i></button>
+            </div>
+          </td>
+  
+          <div class="modal fade" tabindex="-1" id="ark<%= element._id %>">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">You are about to delete a Note</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>This will delete customer record of <b class="fw-bold"><%= element.firstName %> <%= element.lastName %></b></br></p>
+                  <p>Are you sure?</p>
+                </div>
+                <div class="modal-footer">
+  
+                  <button type="button" class="btn dark" data-bs-dismiss="modal">Cancel</button>
+                  <form action="/edit/<%= element._id %>?_method=DELETE" method="post" class="position-relative">
+                    <button type="submit" class="btn btn-danger">Yes, Remove Customer</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  
+    <% } else {%>
+<h1>No Customer Found</h1>
+        <% } %>
+  
+  </div>

@@ -40,14 +40,31 @@
             <a href="/edit/<%= element._id %>" type="button" class="btn btn-warning btn-small">
               <i class="bi bi-pencil"></i>
             </a>
-            <form action="/edit/<%= element._id %>?_method=DELETE" method="POST" class="position-relative">
-              <button type="submit" class="btn btn-danger btn-small">
-                <i class="bi bi-person"></i>
-              </button>
-            </form>
+            <button type="button" class="btn btn-small btn-danger deleteLink" data-id="<%= element._id %>" data-bs-toggle="modal" id="deleteButton" data-bs-target="#ark<%= element._id %>"> <i class="bi bi-person"></i></button>
           </div>
         </td>
 
+        <div class="modal fade" tabindex="-1" id="ark<%= element._id %>">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">You are about to delete a Note</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>This will delete customer record of <b class="fw-bold"><%= element.firstName %> <%= element.lastName %></b></br></p>
+                <p>Are you sure?</p>
+              </div>
+              <div class="modal-footer">
+
+                <button type="button" class="btn dark" data-bs-dismiss="modal">Cancel</button>
+                <form action="/edit/<%= element._id %>?_method=DELETE" method="post" class="position-relative">
+                  <button type="submit" class="btn btn-danger">Yes, Remove Customer</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </tr>
       <% }) %>
     </tbody>
@@ -55,41 +72,36 @@
 
 
   <% if ( customer.length>0 ) { %>
-    <nav aria-label="Page navigation example border-dark ">
-      <ul class="pagination justify-content-center mt-5 border-dark">
-       
-        <% if ( current == 1 ) { %>
-        <li class="page-item disabled"><a class="page-link " href="#">First</a></li>
+  <nav aria-label="Page navigation example border-dark ">
+    <ul class="pagination justify-content-center mt-5 border-dark">
+
+      <% if ( current == 1 ) { %>
+      <li class="page-item disabled"><a class="page-link " href="#">First</a></li>
+      <% } else { %>
+      <li class="page-item"><a class="page-link text-dark border-dark" href="/?page=1">First</a></li>
+      <% } %>
+
+      <% var i=(Number(current) > 5 ? Number(current)- 4 : 1 ) %>
+      <% if ( i != 1 ) { %>
+      <li class="page-item"><a class="page-link text-dark border-dark" href="#">...</a></li>
+      <% } %>
+      <% for(; i <= (Number(current) + 4) && i <=pages; i++ ) {%>
+      <% if (i==current) { %>
+      <li class="page-item disabled"><a class="page-link border-primary text-primary" href="#"><%= i %></a>
         <% } else { %>
-        <li class="page-item"><a class="page-link text-dark border-dark" href="/?page=1">First</a></li>
-        <% } %>
-  
-        <% var i=(Number(current) > 5 ? Number(current)- 4 : 1 ) %>
-        <% if ( i != 1 ) { %>
-        <li class="page-item"><a class="page-link text-dark border-dark" href="#">...</a></li>
-        <% } %>
-        <% for(; i <= (Number(current) + 4) && i <=pages; i++ ) {%>
-        <% if (i==current) { %>
-        <li class="page-item disabled"><a class="page-link border-primary text-primary" href="#"><%= i %></a>
-          <% } else { %>
-        <li class="page-item"><a class="page-link text-dark border-dark" href="/?page=<%= i %>"><%= i %></a></li>
-        <% } %>
-        <% } %>
-        <% if (i==Number(current) + 4 && i < pages ) { %>
-        <li class="page-item"><a class="page-link text-dark border-dark" href="#">...</a></li>
-        <% } %>
-        <% if (current == pages) { %>
-        <li class="page-item disabled"><a class="page-link">Last</a></li>
-        <% } else { %>
-        <li class="page-item"><a href="/?page=<%= pages %>" class="page-link text-dark border-dark">Last</a></li>
-        <% } %>
-      </ul>
-    </nav>
-    <% } %>
-
-
-
+      <li class="page-item"><a class="page-link text-dark border-dark" href="/?page=<%= i %>"><%= i %></a></li>
+      <% } %>
+      <% } %>
+      <% if (i==Number(current) + 4 && i < pages ) { %>
+      <li class="page-item"><a class="page-link text-dark border-dark" href="#">...</a></li>
+      <% } %>
+      <% if (current == pages) { %>
+      <li class="page-item disabled"><a class="page-link">Last</a></li>
+      <% } else { %>
+      <li class="page-item"><a href="/?page=<%= pages %>" class="page-link text-dark border-dark">Last</a></li>
+      <% } %>
+    </ul>
+  </nav>
+  <% } %>
 
 </div>
-
-

@@ -6,6 +6,7 @@ const connectDB = require("./server/config/db");
 const { flash } = require("express-flash-message");
 const { createCanvas, registerFont } = require("canvas");
 const Chart = require("chart.js");
+const methodOverride = require('method-override')
 const session = require("express-session");
 const osu = require("node-os-utils");
 const app = express();
@@ -13,6 +14,7 @@ const port = process.env.PORT || 5000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method'));
 
 //static Files
 app.use("/public", express.static("public"));
@@ -61,7 +63,7 @@ const useData = async (externalArray) => {
     externalArray.push(usedMemory);
     let freeMemory = (await memory).freeMemMb; // Wait for the promise to resolve and get the data
     externalArray.push(freeMemory);
-    console.log(freeMemory, usedMemory); // Access the resolved data
+    // console.log(freeMemory, usedMemory); // Access the resolved data
   };
   addDataToArray();
   setInterval(addDataToArray, 2000); // Automatically add data to the array in every 5 seconds
