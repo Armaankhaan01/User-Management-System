@@ -1,6 +1,33 @@
-<div class="container  justify-content-center m-auto align-item-center">
-<div class="container-custom mt-5 m-auto justify-content-center align-item-center">
-    <h1 class="text-center">Sever Ram Usage Pie Chart</h1>
-    <img src="<%= imageURI %>" class="img-fluid m-auto ps-5 ms-5" alt="Pie Chart">
+<div class="container justify-content-center align-items-center py-5">
+  <div class="container-custom height-half container p-3 align-items-center justify-content-center">
+    <h1 class="text-center">Pie Chart for Web Development</h1>
+    <div class="pieChart justify-content-center align-items-center ">
+      <canvas id="pie-chart"></canvas>
+    </div>
+  </div>
 </div>
-</div>
+<!-- You can find the library code from below link  -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- end of library link  -->
+<script>
+  const myArray = [<%= myArray %>]
+  console.log(myArray)
+  new Chart(document.getElementById('pie-chart'), {
+    type: 'pie',
+    data: {
+      labels: ["Used Ram", "Free Ram"],
+      datasets: [{
+        backgroundColor: ["red", "blue"],
+        data: myArray
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Pie Chart for admin panel'
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+    }
+  });
+</script>

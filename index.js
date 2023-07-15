@@ -4,8 +4,6 @@ const express = require("express");
 const expressLayout = require("express-ejs-layouts");
 const connectDB = require("./server/config/db");
 const { flash } = require("express-flash-message");
-const { createCanvas, registerFont } = require("canvas");
-const Chart = require("chart.js");
 const methodOverride = require('method-override')
 const session = require("express-session");
 const osu = require("node-os-utils");
@@ -73,51 +71,58 @@ const myArray = [];
 const dataHandler = useData(myArray);
 
 app.get("/chart", (req, res) => {
-  const canvasWidth = 400; // Width of the canvas
-  const canvasHeight = 400; // Height of the canvas
-  const canvas = createCanvas(canvasWidth, canvasHeight);
-  const ctx = canvas.getContext("2d");
   console.log(myArray);
-  const data = {
-    labels: ["Used Ram", "Free Ram"],
-    values: myArray,
-  };
 
-  const chartConfig = {
-    type: "pie",
-    data: {
-      labels: data.labels,
-      datasets: [
-        {
-          backgroundColor: ["red", "blue"], // Customize colors as needed
-          data: data.values,
-        },
-      ],
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'Server Ram Statistics'
-      },
-      responsive: true, // Adjust as per your requirements
-      maintainAspectRatio: true,
-      plugins: {
-        legend: {
-          display: true,
-          position: "bottom", // Change position if needed
-        },
-      },
-    },
+  /**
+   * This downward code is to directly generate a pie-chart from server
+   */
 
-  };
+
+  // const canvasWidth = 400; // Width of the canvas
+  // const canvasHeight = 400; // Height of the canvas
+  // const canvas = createCanvas(canvasWidth, canvasHeight);
+  // const ctx = canvas.getContext("2d");
+  // const data = {
+  //   labels: ["Used Ram", "Free Ram"],
+  //   values: myArray,
+  // };
+
+  // const chartConfig = {
+  //   type: "pie",
+  //   data: {
+  //     labels: data.labels,
+  //     datasets: [
+  //       {
+  //         backgroundColor: ["red", "blue"], // Customize colors as needed
+  //         data: data.values,
+  //       },
+  //     ],
+  //   },
+  //   options: {
+  //     title: {
+  //       display: true,
+  //       text: 'Server Ram Statistics'
+  //     },
+  //     responsive: true, // Adjust as per your requirements
+  //     maintainAspectRatio: true,
+  //     plugins: {
+  //       legend: {
+  //         display: true,
+  //         position: "bottom", // Change position if needed
+  //       },
+  //     },
+  //   },
+
+  // };
   const locals = {
     title: "Server Ram Usage",
     description: "This is a NodeJs Powered user managment system",
   };
-  const chart = new Chart(ctx, chartConfig);
+  // const chart = new Chart(ctx, chartConfig);
+  // const imageURI = canvas.toDataURL("image/png");
 
-  const imageURI = canvas.toDataURL("image/png");
-  res.render("pieChart", { locals, imageURI });
+  // res.render("pieChart", { locals, imageURI, myArray });
+  res.render("pieChart", { locals,myArray });
 });
 
 // Handle 404

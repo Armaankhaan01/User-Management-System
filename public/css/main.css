@@ -1,5 +1,6 @@
 :root {
   --sidebar-width: 300px; /* Default width */
+  --piechart-width: 300px
 }
 
 body {
@@ -17,6 +18,19 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   width: 740px;
 }
+@media all and (max-width: 780px) {
+  .container-custom {
+    width: auto;
+  }
+}
+
+@media all and (max-width: 400px) {
+  .container-custom {
+    padding: 0px 20px;
+  }
+}
+
+
 
 /*
    * Sidebar
@@ -107,8 +121,4 @@ body {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
-
-
-
-
 
