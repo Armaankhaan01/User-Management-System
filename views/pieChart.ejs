@@ -4,7 +4,7 @@
     <div class="pieChart justify-content-center align-items-center ">
       <canvas id="pie-chart"></canvas>
     </div>
-    <h1 class="text-center">Server Network Speed &rarr; <span class="text-live"></span> Mbps </h1>
+    <!-- <h1 class="text-center">Server Network Speed &rarr; <span class="text-live"></span> Mbps </h1> -->
   </div>
 </div>
 <!-- You can find the library code from below link  -->
@@ -32,21 +32,21 @@
     }
   });
   // Inside your EJS template or a separate JavaScript file
-  document.addEventListener('DOMContentLoaded', () => {
-    const speedElement = document.querySelector('.text-live');
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   const speedElement = document.querySelector('.text-live');
 
-    const updateLiveCount = () => {
-      fetch('/networkSpeed')
-        .then(response => response.json())
-        .then(data => {
-          speedElement.textContent = data.speed;
-        })
-        .catch(error => {
-          console.log('Error fetching live count:', error);
-        });
-    };
+  //   const updateLiveCount = () => {
+  //     fetch('/networkSpeed')
+  //       .then(response => response.json())
+  //       .then(data => {
+  //         speedElement.textContent = data.speed;
+  //       })
+  //       .catch(error => {
+  //         console.log('Error fetching live count:', error);
+  //       });
+  //   };
 
-    updateLiveCount();
-    setInterval(updateLiveCount, 6000);
-  });
+  //   updateLiveCount();
+  //   setInterval(updateLiveCount, 6000);
+  // });
 </script>
