@@ -1,7 +1,7 @@
 <div class="container justify-content-center align-items-center py-5">
   <div class="container-custom height-half container p-3 align-items-center justify-content-center">
     <h1 class="text-center">Pie Chart for Server Ram usage</h1>
-    <div class="pieChart justify-content-center align-items-center ">
+    <div class="pieChart justify-content-center align-items-center" id="canvasLive">
       <canvas id="pie-chart"></canvas>
     </div>
     <!-- <h1 class="text-center">Server Network Speed &rarr; <span class="text-live"></span> Mbps </h1> -->
@@ -13,7 +13,7 @@
 <!-- end of library link  -->
 <script>
   const myArray = [<%= ramArray %>]
-  new Chart(document.getElementById('pie-chart'), {
+  const myChart = new Chart(document.getElementById('pie-chart'), {
     type: 'pie',
     data: {
       labels: ["Used Ram", "Free Ram"],
@@ -31,6 +31,22 @@
       maintainAspectRatio: false,
     }
   });
+
+  const updateChart = () => {
+    fetch('/get-updated-data') // Replace '/get-updated-data' with the appropriate server route
+      .then(response => response.json())
+      .then(data => {
+        // Update the chart with the new data
+        myChart.data.datasets[0].data = data.data;
+        console.log(data.data);
+        myChart.update();
+      })
+      .catch(error => {
+        console.log('Error fetching updated data:', error);
+      });
+  };
+
+  setInterval(updateChart, 3000);
   // Inside your EJS template or a separate JavaScript file
   // document.addEventListener('DOMContentLoaded', () => {
   //   const speedElement = document.querySelector('.text-live');

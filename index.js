@@ -88,6 +88,10 @@ app.get("/chart", async (req, res) => {
   }
 });
 
+app.get("/get-updated-data", async (req, res) => {
+  res.json({ data: ramArray });
+});
+
 // app.get("/networkSpeed", async (req, res) => {
 //   try {
 //     const speedTest = new SpeedTest({
