@@ -1,17 +1,18 @@
 <div class="container justify-content-center align-items-center py-5">
   <div class="container-custom height-half container p-3 align-items-center justify-content-center">
-    <h1 class="text-center">Pie Chart for Web Development</h1>
+    <h1 class="text-center">Pie Chart for Server Ram usage</h1>
     <div class="pieChart justify-content-center align-items-center ">
       <canvas id="pie-chart"></canvas>
     </div>
+    <h1 class="text-center">Server Network Speed &rarr; <span class="text-live"></span> Mbps </h1>
   </div>
 </div>
 <!-- You can find the library code from below link  -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src=" https://cdn.jsdelivr.net/npm/chart.js">
+</script>
 <!-- end of library link  -->
 <script>
-  const myArray = [<%= myArray %>]
-  console.log(myArray)
+  const myArray = [<%= ramArray %>]
   new Chart(document.getElementById('pie-chart'), {
     type: 'pie',
     data: {
@@ -29,5 +30,23 @@
       responsive: true,
       maintainAspectRatio: false,
     }
+  });
+  // Inside your EJS template or a separate JavaScript file
+  document.addEventListener('DOMContentLoaded', () => {
+    const speedElement = document.querySelector('.text-live');
+
+    const updateLiveCount = () => {
+      fetch('/networkSpeed')
+        .then(response => response.json())
+        .then(data => {
+          speedElement.textContent = data.speed;
+        })
+        .catch(error => {
+          console.log('Error fetching live count:', error);
+        });
+    };
+
+    updateLiveCount();
+    setInterval(updateLiveCount, 6000);
   });
 </script>

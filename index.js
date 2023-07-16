@@ -4,15 +4,18 @@ const express = require("express");
 const expressLayout = require("express-ejs-layouts");
 const connectDB = require("./server/config/db");
 const { flash } = require("express-flash-message");
-const methodOverride = require('method-override')
+const methodOverride = require("method-override");
 const session = require("express-session");
 const osu = require("node-os-utils");
+const SpeedTest = require("fast-speedtest-api");
+
+// Perform the network speed test
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(methodOverride('_method'));
+app.use(methodOverride("_method"));
 
 //static Files
 app.use("/public", express.static("public"));
@@ -34,7 +37,7 @@ app.use(flash({ sessionKeyName: "flashMessage" }));
 //Connect to database
 connectDB();
 
-//templating engine
+//template engine
 app.use(expressLayout);
 app.set("layout", "./layouts/main");
 app.set("view engine", "ejs");
@@ -43,10 +46,9 @@ app.set("views", __dirname + "/views");
 // routes
 app.use("/", require("./server/routes/customer"));
 
-
 /**
  * Get Server Ram Usage Pie Chart
- * I am trying something out to learn piechart 
+ * I am trying something out to learn pie chart
  */
 
 const useData = async (externalArray) => {
@@ -64,65 +66,43 @@ const useData = async (externalArray) => {
     // console.log(freeMemory, usedMemory); // Access the resolved data
   };
   addDataToArray();
-  setInterval(addDataToArray, 2000); // Automatically add data to the array in every 5 seconds
+  setInterval(addDataToArray, 2000); // Automatically add data to the array in every 2 seconds
 };
 
-const myArray = [];
-const dataHandler = useData(myArray);
+const ramArray = [];
+const dataHandler = useData(ramArray);
 
-app.get("/chart", (req, res) => {
-  console.log(myArray);
-
-  /**
-   * This downward code is to directly generate a pie-chart from server
-   */
-
-
-  // const canvasWidth = 400; // Width of the canvas
-  // const canvasHeight = 400; // Height of the canvas
-  // const canvas = createCanvas(canvasWidth, canvasHeight);
-  // const ctx = canvas.getContext("2d");
-  // const data = {
-  //   labels: ["Used Ram", "Free Ram"],
-  //   values: myArray,
-  // };
-
-  // const chartConfig = {
-  //   type: "pie",
-  //   data: {
-  //     labels: data.labels,
-  //     datasets: [
-  //       {
-  //         backgroundColor: ["red", "blue"], // Customize colors as needed
-  //         data: data.values,
-  //       },
-  //     ],
-  //   },
-  //   options: {
-  //     title: {
-  //       display: true,
-  //       text: 'Server Ram Statistics'
-  //     },
-  //     responsive: true, // Adjust as per your requirements
-  //     maintainAspectRatio: true,
-  //     plugins: {
-  //       legend: {
-  //         display: true,
-  //         position: "bottom", // Change position if needed
-  //       },
-  //     },
-  //   },
-
-  // };
+app.get("/chart", async (req, res) => {
   const locals = {
     title: "Server Ram Usage",
-    description: "This is a NodeJs Powered user managment system",
+    description: "This is a NodeJs Powered user management system",
   };
-  // const chart = new Chart(ctx, chartConfig);
-  // const imageURI = canvas.toDataURL("image/png");
+  try {
+    res.render("pieChart", {
+      locals,
+      ramArray,
+    });
+  } catch (error) {
+    console.log("Error fetching network speed:", error);
+    res.send(error);
+  }
+});
 
-  // res.render("pieChart", { locals, imageURI, myArray });
-  res.render("pieChart", { locals,myArray });
+app.get("/networkSpeed", async (req, res) => {
+  try {
+    const speedTest = new SpeedTest({
+      token: "YXNkZmFzZGxmbnNkYWZoYXNkZmhrYWxm",
+    });
+    const speed = await speedTest.getSpeed();
+
+    // Convert speed to Mbps
+    const speedMbps = ((speed / 1024 / 1024) * 8).toFixed(2);
+
+    res.json({ speed: speedMbps });
+  } catch (error) {
+    console.log("Error fetching network speed:", error);
+    res.render("error");
+  }
 });
 
 // Handle 404
