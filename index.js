@@ -92,22 +92,22 @@ app.get("/get-updated-data", async (req, res) => {
   res.json({ data: ramArray });
 });
 
-// app.get("/networkSpeed", async (req, res) => {
-//   try {
-//     const speedTest = new SpeedTest({
-//       token: "YXNkZmFzZGxmbnNkYWZoYXNkZmhrYWxm",
-//     });
-//     const speed = await speedTest.getSpeed();
+app.get("/networkSpeed", async (req, res) => {
+  try {
+    const speedTest = new SpeedTest({
+      token: "YXNkZmFzZGxmbnNkYWZoYXNkZmhrYWxm",
+    });
+    const speed = await speedTest.getSpeed();
 
-//     // Convert speed to Mbps
-//     const speedMbps = ((speed / 1024 / 1024) * 8).toFixed(2);
+    // Convert speed to Mbps
+    const speedMbps = ((speed / 1024 / 1024) * 8).toFixed(2);
 
-//     res.json({ speed: speedMbps });
-//   } catch (error) {
-//     console.log("Error fetching network speed:", error);
-//     res.render("error");
-//   }
-// });
+    res.json({ speed: speedMbps });
+  } catch (error) {
+    console.log("Error fetching network speed:", error);
+    res.send("error");
+  }
+});
 
 // Handle 404
 app.get("*", (req, res) => {
