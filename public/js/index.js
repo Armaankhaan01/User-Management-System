@@ -57,10 +57,10 @@ function onTimesUp() {
 
 function startTimer(TIME_LIMIT) {
   document.getElementById("app").innerHTML = `
-  <div class="col-10">
+  <div class="col-10 col-md">
         <h1 class="text-center">Pie Chart for Server Ram usage</h1>
       </div>
-      <div class="base-timer col-2 text-end">
+      <div class="base-timer col-2 col-md text-end">
 <div class="base-timer">
   <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
     <g class="base-timer__circle">

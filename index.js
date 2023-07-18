@@ -101,7 +101,10 @@ app.get("/networkSpeed", async (req, res) => {
 
     // Convert speed to Mbps
     const speedMbps = ((speed / 1024 / 1024) * 8).toFixed(2);
-
+    // Set caching headers
+    const cacheDuration = 2; // Cache duration in seconds
+    const cacheControlHeader = `public, max-age=${cacheDuration}`;
+    res.setHeader("Cache-Control", cacheControlHeader);
     res.json({ speed: speedMbps });
   } catch (error) {
     console.log("Error fetching network speed:", error);
