@@ -1,11 +1,23 @@
 <div class="container justify-content-center align-items-center py-5">
-  <div class="container-custom height-half container p-3 align-items-center text-center justify-content-center">
-    <h1 class="text-center">Pie Chart for Server Ram usage</h1>
+  <div class=" container-custom height-half container p-3 align-items-center text-center justify-content-center">
+    <div class="d-flex row" id="app">
+      <h1 class="text-center">Pie Chart for Server Ram usage</h1>
+    </div>
     <div class="pieChart justify-content-center align-items-center" id="canvasLive">
       <canvas id="pie-chart"></canvas>
     </div>
+    <div class="row my-3 justify-content-center">
+      <div class="col-4">
+        <input type="number" id="timeInterval" class="form-control  border-dark " placeholder="Time in seconds" />
+      </div>
+      <div class="col-4">
+        <button id="startButton" class="btn btn-outline-dark">Start Chart Update</button>
+      </div>
+      <div class="col-4">
+        <button onclick="updateLiveCount()" class="btn btn-outline-dark">Server Network Speed</button>
+      </div>
+    </div>
     <h1 class="text-live "></h1>
-    <button onclick="updateLiveCount()" class="btn btn-outline-dark">Server Network Speed</button>
   </div>
 </div>
 <!-- You can find the library code from below link  -->
@@ -13,42 +25,92 @@
 </script>
 <!-- end of library link  -->
 <script>
-  const myArray = [<%= ramArray %>]
-  const myChart = new Chart(document.getElementById('pie-chart'), {
-    type: 'pie',
-    data: {
-      labels: ["Used Ram", "Free Ram"],
-      datasets: [{
-        backgroundColor: ["red", "blue"],
-        data: myArray
-      }]
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'Pie Chart for admin panel'
+  document.addEventListener('DOMContentLoaded', () => {
+    const timeIntervalField = document.getElementById('timeInterval');
+    const startButton = document.getElementById('startButton');
+    const timerElement = document.getElementById('timer');
+    const myArray = [<%= ramArray %>]
+
+    let updateInterval; // Variable to store the interval ID for stopping the chart update
+    let remainingTime; // Variable to store the remaining time in seconds
+    let updateTimer;
+    let timerUpdateInterval;
+    let timeInterval;
+    const myChart = new Chart(document.getElementById('pie-chart'), {
+      type: 'pie',
+      data: {
+        labels: ["Used Ram", "Free Ram"],
+        datasets: [{
+          backgroundColor: ["red", "blue"],
+          data: myArray
+        }]
       },
-      responsive: true,
-      maintainAspectRatio: false,
-    }
+      options: {
+        title: {
+          display: true,
+          text: 'Pie Chart for admin panel'
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+      }
+    });
+
+    const updateChart = () => {
+      fetch('/get-updated-data') // Replace '/get-updated-data' with the appropriate server route
+        .then(response => response.json())
+        .then(data => {
+          // Update the chart with the new data
+          myChart.data.datasets[0].data = data.data;
+          // console.log(data.data);
+          myChart.update();
+        })
+        .catch(error => {
+          console.log('Error fetching updated data:', error);
+        });
+    };
+
+
+    // Function to start the chart update based on the specified time interval
+    const startChartUpdate = () => {
+      timeInterval = parseInt(timeIntervalField.value);
+      if (!isNaN(timeInterval) && timeInterval > 0) {
+        remainingTime = timeInterval;
+        clearInterval(updateInterval); // Clear the previous interval, if any
+        clearInterval(updateTimer);
+        updateChart(); // Update the chart immediately
+        updateInterval = setInterval(updateChart, timeInterval * 1000); // Start the interval for chart updates
+        // startButton.disabled = true; // Disable the start button after it is clicked
+        // Update the remaining time every second
+        // timerUpdateInterval = setInterval(() => {
+        //     remainingTime--;
+        //     timerElement.innerHTML = `Time remaining: <span id="timeValue">${remainingTime}</span> seconds`;
+        //     if (remainingTime <= 0) {
+        //       remainingTime = timeInterval;
+        //       // startButton.disabled = false; // Enable the start button after the time interval is complete
+        //     }
+        //   }, 1000);
+        startTimer(timeInterval)
+      }
+    };
+
+    // updateTimer = setInterval(timerUpdateInterval, timeInterval * 1000);
+
+    // Function to stop the chart update
+    const stopChartUpdate = () => {
+      clearInterval(updateInterval); // Stop the interval for chart updates
+      clearInterval(updateTimer);
+      startButton.disabled = false; // Enable the start button
+      timerElement.textContent = '';
+    };
+    // setInterval(updateChart, 2000);  // It automatically updates the chart in every two seconds.
+
+    // Add event listeners to start and stop buttons
+    startButton.addEventListener('click', startChartUpdate);
+
+
   });
 
-  const updateChart = () => {
-    fetch('/get-updated-data') // Replace '/get-updated-data' with the appropriate server route
-      .then(response => response.json())
-      .then(data => {
-        // Update the chart with the new data
-        myChart.data.datasets[0].data = data.data;
-        console.log(data.data);
-        myChart.update();
-      })
-      .catch(error => {
-        console.log('Error fetching updated data:', error);
-      });
-  };
 
-  setInterval(updateChart, 3000);
-  // Inside your EJS template or a separate JavaScript file
   // document.addEventListener('DOMContentLoaded', () => {
   const speedElement = document.querySelector('.text-live');
 
